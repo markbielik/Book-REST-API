@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,9 +11,15 @@ class ListBooksView(generics.ListCreateAPIView):
     """
     View create list all books form database
     and we have options to add new book to database.
+    Options filter is active
     """
     queryset = Books.objects.all()
     serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['authors',
+                        'title',
+                        'publication_year',
+                        'acquired_state']
 
     def get_view_name(self):
         return "Books List"
@@ -47,3 +54,4 @@ class SearchAuthorsView(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter, )
     queryset = Books.objects.all()
     serializer_class = BookSerializer
+
