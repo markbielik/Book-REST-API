@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -40,3 +40,10 @@ class ApiSpecification(APIView):
             }
         }
         return Response(data)
+
+
+class SearchAuthorsView(generics.ListCreateAPIView):
+    search_fields = ['authors']
+    filter_backends = (filters.SearchFilter, )
+    queryset = Books.objects.all()
+    serializer_class = BookSerializer
