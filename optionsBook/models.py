@@ -22,4 +22,3 @@ class Books(models.Model):
 
     def get_absolute_url(self):
         return reverse('book_detail', args=(self.pk,))
-
