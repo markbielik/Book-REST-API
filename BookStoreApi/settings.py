@@ -76,12 +76,14 @@ WSGI_APPLICATION = 'BookStoreApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+try:
+    # from .heroku_settings import DATABASES
+    from .localsqlite_settings import DATABASES
+except ModuleNotFoundError:
+    print("There is no database configuration in the file localsqlite_settings.py!")
+    # print("There is no database configuration in the file heroku_settings.py!")
+    print("Fill in the details and try again!")
+    exit(0)
 
 
 # Password validation
