@@ -3,7 +3,7 @@ from urllib.request import urlopen
 
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters
+from rest_framework import generics, filters, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,11 +11,18 @@ from .models import Books
 from .serializers import BookSerializer
 
 
-class ListBooksView(generics.ListCreateAPIView):
+class ListBooksViewSet(viewsets.ModelViewSet):
     """
     View create list all books form database
     and we have options to add new book to database.
     Options filter is active
+
+    You have tried these URL patterns, in this order:
+    api_spec/
+    books/<int:pk>/
+    search/
+    import/
+
     """
     queryset = Books.objects.all()
     serializer_class = BookSerializer
@@ -28,10 +35,34 @@ class ListBooksView(generics.ListCreateAPIView):
     def get_view_name(self):
         return "Books List"
 
+# /// This class was left for testing ///
+# class ListBooksView(generics.ListCreateAPIView):
+#     """
+#     View create list all books form database
+#     and we have options to add new book to database.
+#     Options filter is active
+#     """
+#     queryset = Books.objects.all()
+#     serializer_class = BookSerializer
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ['authors',
+#                         'title',
+#                         'publication_year',
+#                         'acquired_state']
+#
+#     def get_view_name(self):
+#         return "Books List"
+
 
 class DetailBookView(generics.RetrieveUpdateDestroyAPIView):
     """
     Print detail single book.
+
+     You have tried these URL patterns, in this order:
+    api_spec/
+    books/
+    search/
+    import/
     """
     queryset = Books.objects.all()
     serializer_class = BookSerializer
@@ -43,6 +74,12 @@ class DetailBookView(generics.RetrieveUpdateDestroyAPIView):
 class ApiSpecification(APIView):
     """
     show a defined api version
+
+     You have tried these URL patterns, in this order:
+    books/
+    books/<int:pk>/
+    search/
+    import/
     """
     def get(self, request):
         data = {
@@ -56,6 +93,12 @@ class ApiSpecification(APIView):
 class SearchAuthorsView(generics.ListCreateAPIView):
     """
     different version of the search
+
+     You have tried these URL patterns, in this order:
+    api_spec/
+    books/
+    books/<int:pk>/
+    import/
     """
     search_fields = ['authors']
     filter_backends = (filters.SearchFilter, )
@@ -66,7 +109,14 @@ class SearchAuthorsView(generics.ListCreateAPIView):
 class ImportBooks(APIView):
     """
     import books to database from address url
+
+     You have tried these URL patterns, in this order:
+    api_spec/
+    books/
+    books/<int:pk>/
+    search/
     """
+
     def get(self, request):
         return render(request, 'form.html')
 
